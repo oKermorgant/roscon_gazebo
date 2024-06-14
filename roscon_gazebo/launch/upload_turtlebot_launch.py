@@ -3,7 +3,7 @@ from simple_launch import SimpleLauncher, GazeboBridge
 sl = SimpleLauncher(use_sim_time=True)
 
 sl.declare_arg('name', 'turtlebot')
-sl.declare_gazebo_axes(x = -1., y = 0., z = .3, yaw = 0.)
+sl.declare_gazebo_axes(x = -1., y = 0., z = .1, yaw = 0.)
 sl.declare_arg('gui', True, description = 'If we want sliders to control the velocity manually')
 sl.declare_arg('gt', True, description = 'If Gazebo should publish the odometry or the ground truth')
 
@@ -25,12 +25,14 @@ def launch_setup():
         bridges.append(GazeboBridge(gz_js_topic, 'joint_states', 'sensor_msgs/JointState', GazeboBridge.gz2ros))
         
         if sl.arg('gt'):
+            # publish ground truth over /tf
             bridges.append(GazeboBridge(f'/model/{name}/pose',
                                      'pose_gt', 'geometry_msgs/Pose', GazeboBridge.gz2ros))
             sl.node('pose_to_tf', parameters={'child_frame': name + '/base_footprint'})
         else:
+            # just publish odometry
             bridges.append(GazeboBridge(f'/model/{name}/odometry',
-                            'odom', 'nav_msgs/Odometry', GazeboBridge.gz2ros))
+                            'odom', 'nav_msgs/Odometry', GazeboBridge.gz2ros, gz_msg='gz.msgs.Odometry'))
             bridges.append(GazeboBridge(f'/model/{name}/tf',
                         '/tf', 'tf2_msgs/msg/TFMessage', GazeboBridge.gz2ros))
         

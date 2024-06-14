@@ -24,12 +24,12 @@
 
 
 <xacro:macro name="inertia" params="mass">
-     <inertial>
+<!--     <inertial>
       <mass value="${mass}"/>
       <inertia  izz="${mass}" ixy="0.0"  ixz="0.0"
                 iyy="${mass}" iyz="0.0"
                 ixx="${mass}" />
-    </inertial>
+    </inertial>-->
 </xacro:macro>
 
 
@@ -51,7 +51,13 @@
       </geometry>
     <material name="matbase"/>
     </visual>
-    <xacro:inertia mass="10"/>
+    <collision>
+      <origin xyz="0 0 0.25" rpy="0 0 0" />
+      <geometry>
+        <cylinder length="0.5" radius="0.025"/>
+      </geometry>
+    </collision>
+    <xacro:inertia mass="0.5"/>
   </link>
 
 <link name="turret/link1">
@@ -174,8 +180,7 @@
 
     </xacro:macro>
 
-
-    <gazebo>
+<gazebo>
 
       <!-- Velocity or position control -->
       <xacro:control joint="joint1"/>
@@ -184,7 +189,18 @@
 
       <!-- Publish joint states anyway -->
       <plugin filename="ignition-gazebo-joint-state-publisher-system" name="ignition::gazebo::systems::JointStatePublisher"/>
+
+      <!-- Publish pose of this model -->
+      <plugin
+            filename="ignition-gazebo-pose-publisher-system"
+            name="ignition::gazebo::systems::PosePublisher">
+            <publish_link_pose>false</publish_link_pose>
+            <publish_collision_pose>false</publish_collision_pose>
+            <publish_visual_pose>false</publish_visual_pose>
+            <publish_nested_model_pose>true</publish_nested_model_pose>
+        </plugin>
     </gazebo>
+
 
  <gazebo reference="turret/tool0">
   <sensor name="camera" type="camera">
@@ -207,6 +223,9 @@
     <enable_metrics>false</enable_metrics>
   </sensor>
 </gazebo>
+
+
+
 
 
 

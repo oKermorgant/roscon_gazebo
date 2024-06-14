@@ -3,9 +3,8 @@ project(turtlebot_description)
 
 find_package(ament_cmake QUIET)
 
-# used later when it does not work
+# used later when it does not work: tell Gazebo to look for files here
 #ament_environment_hooks("hooks/resource_paths.dsv.in")
-#install(FILES model.config DESTINATION share/${PROJECT_NAME})
 
 install(DIRECTORY urdf meshes DESTINATION share/${PROJECT_NAME})
 
