@@ -45,7 +45,7 @@ def launch_setup():
         # image with lazy construction (no GazeboBridge, only tuple with arguments)
         bridges.append((f'{name}/image', 'image', 'sensor_msgs/Image', GazeboBridge.gz2ros))
 
-        # ground truth pose if not fixed in URDF
+        # ground truth pose if not fixed joint world -> base_link in URDF
         #bridges.append(GazeboBridge(f'/model/{name}/pose', 'pose_gt', 'geometry_msgs/Pose', GazeboBridge.gz2ros))
         #sl.node('pose_to_tf', parameters={'child_frame': f'{name}/base_link'})
 

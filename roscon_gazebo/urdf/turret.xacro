@@ -32,14 +32,14 @@
     </inertial>-->
 </xacro:macro>
 
-
+<!--
 <link name="world"/>
 
 <joint name="base_link" type="fixed">
     <parent link="world" />
     <child link="turret/base_link" />
     <origin xyz="$(arg x) $(arg y) 0.0" />
-</joint>
+</joint>-->
 
 
 <!-- Links -->

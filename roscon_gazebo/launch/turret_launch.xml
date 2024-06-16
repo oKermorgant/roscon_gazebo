@@ -1,0 +1,55 @@
+<launch>
+
+  <!-- args that can be set from the command line or a default will be used -->
+  <arg name="mode" default="velocity"/>
+  <arg name="gui" default="True"/>
+
+  <!-- Run Gazebo -->
+
+  <include file="$(find-pkg-share ros_gz_sim)/launch/gz_sim.launch.py" if="$(var gui)">
+      <arg name="gz_args" value="$(find-pkg-share roscon_gazebo)/urdf/world.sdf -r -s"/>
+  </include>
+  <include file="$(find-pkg-share ros_gz_sim)/launch/gz_sim.launch.py" unless="$(var gui)">
+      <arg name="gz_args" value="$(find-pkg-share roscon_gazebo)/urdf/world.sdf -r"/>
+  </include>
+
+  <group>
+      <push-ros-namespace namespace="turret"/>
+      <node pkg="robot_state_publisher" exec="robot_state_publisher" name="robot_state_publisher">
+          <param name="robot_description" value="$(command 'xacro $(find-pkg-share roscon_gazebo)/urdf/turret.xacro mode:=$(var mode)')"/>
+          <param name="use_sim_time" value="true"/>
+      </node>
+
+      <node pkg="ros_gz_sim" exec="create" name="create"
+            args="-topic robot_description -name turret"/>
+
+      <!-- Create bridges from already configured file -->
+      <node pkg="ros_gz_bridge" exec="parameter_bridge" name="turret_bridge">
+          <param name="config_file" value="$(find-pkg-share roscon_gazebo)/launch/turret_bridges.yaml"/>
+          <param name="use_sim_time" value="true"/>
+      </node>
+
+      <!-- Special image bridge -->
+      <node pkg="ros_gz_image" exec="image_bridge" name="turret_im_bridge"
+            args="turret/image">
+          <remap from="turret/image" to="image"/>
+          <remap from="turret/image/compressed" to="image/compressed"/>
+          <remap from="turret/image/compressedDepth" to="image/compressedDepth"/>
+          <remap from="turret/image/theora" to="image/theora"/>
+
+        </node>
+
+
+      <!-- Manual GUI -->
+      <node pkg="slider_publisher" exec="slider_publisher" name="$(var mode)_manual"
+            args="$(find-pkg-share roscon_gazebo)/launch/$(var mode)_manual.yaml">
+          <param name="use_sim_time" value="true"/>
+      </node>
+
+  </group>
+
+    <!-- RViz -->
+    <node pkg="rviz2" exec="rviz2" name="rviz"
+            args="-d $(find-pkg-share roscon_gazebo)/launch/layout.rviz"/>
+
+</launch>
