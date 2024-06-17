@@ -9,8 +9,8 @@ def launch_setup():
 
     mode = sl.arg('mode')
 
-    gz_args = '-r'  # run the simulation unpaused
-    if sl.arg('gui'):
+    gz_args = ''  # run the simulation unpaused
+    if not sl.arg('gui'):
         gz_args += ' -s'
     sl.gz_launch(sl.find('roscon_gazebo', 'world.sdf'), gz_args)
 
