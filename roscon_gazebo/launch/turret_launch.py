@@ -43,7 +43,7 @@ def launch_setup():
         bridges.append(GazeboBridge(gz_js_topic, 'joint_states', 'sensor_msgs/JointState', GazeboBridge.gz2ros))
 
         # image with lazy construction (no GazeboBridge, only tuple with arguments)
-        bridges.append((f'{name}/image', 'image', 'sensor_msgs/Image', GazeboBridge.gz2ros))
+        bridges.append(GazeboBridge(f'{name}/image', 'image', 'sensor_msgs/Image', GazeboBridge.gz2ros))
 
         # ground truth pose if not fixed joint world -> base_link in URDF
         #bridges.append(GazeboBridge(f'/model/{name}/pose', 'pose_gt', 'geometry_msgs/Pose', GazeboBridge.gz2ros))
@@ -52,7 +52,7 @@ def launch_setup():
         #sl.create_gz_bridge(bridges)
 
         # manual control
-        #sl.node('slider_publisher', arguments = [sl.find('roscon_gazebo', mode + '_manual.yaml')])
+        sl.node('slider_publisher', arguments = [sl.find('roscon_gazebo', mode + '_manual.yaml')])
 
 
     # also display in RViz

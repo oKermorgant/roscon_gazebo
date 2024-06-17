@@ -32,8 +32,8 @@
     </inertial>-->
 </xacro:macro>
 
-<!--
-<link name="world"/>
+
+<!--<link name="world"/>
 
 <joint name="base_link" type="fixed">
     <parent link="world" />

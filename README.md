@@ -6,6 +6,7 @@ This repo consists in two packages to learn about how to interface ROS 2 and Gaz
 
 - `simple_launch`
 - `slider_publisher`
+- [`pose_to_tf`](https://github.com/oKermorgant/pose_to_tf) for the Turtlebot part
 
 ## Available packages
 
@@ -15,3 +16,5 @@ This repo consists in two packages to learn about how to interface ROS 2 and Gaz
 ## Initial state
 
 Most of the things will not work initially. Functional parts of the files (URDF / launch) are simply commented out in order to highlight the mechanics of ROS and Gazebo integration.
+
+
